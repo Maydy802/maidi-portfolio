@@ -52,29 +52,29 @@ function App() {
       projects: [
         {
           title: 'منصة صيدلية العراق',
-          description: 'منصة إلكترونية شاملة لخدمات الصيدليات مع نظام إدارة متقدم وواجهة مستخدم سهلة الاستخدام',
-          link: 'https://github.com/Maydy802/iraq-pharmacy-platform',
+          description: 'منصة صيدلية إلكترونية للوصول السهل إلى المنتجات الصيدلانية في العراق',
+          link: 'https://preview--iraqi-pharmacy-hub.lovable.app/',
           image: pharmacyImg,
           tech: ['React', 'Node.js', 'MongoDB']
         },
         {
           title: 'تطبيق بومودورو الذكي',
-          description: 'مؤقت إنتاجية متطور لتعزيز التركيز والكفاءة مع إحصائيات مفصلة وتقارير الأداء',
-          link: 'https://github.com/Maydy802/smart-pomodoro-app',
+          description: 'تطبيق مؤقت إنتاجية مبني على تقنية بومودورو',
+          link: 'https://mellow-mule-904.convex.app/',
           image: pomodoroImg,
           tech: ['JavaScript', 'CSS3', 'LocalStorage']
         },
         {
           title: 'برنامج تصميم العناصر الخرسانية',
-          description: 'أداة برمجية متخصصة لتصميم العناصر الإنشائية الخرسانية مع حسابات هندسية دقيقة',
-          link: 'https://github.com/Maydy802/concrete-design-program',
+          description: 'تطبيق ويب لتصميم العناصر الإنشائية الخرسانية بكفاءة',
+          link: 'https://preview--beton-eucode-wizard.lovable.app/',
           image: concreteImg,
           tech: ['Python', 'Qt', 'NumPy']
         },
         {
           title: 'تطبيق الساعة الذكية',
-          description: 'تطبيق لوحة تحكم شاملة للساعة الذكية مع مراقبة الصحة والإشعارات الذكية',
-          link: 'https://github.com/Maydy802/smartwatch-dashboard',
+          description: 'لوحة تحكم رقمية للأجهزة الذكية',
+          link: 'https://smart-rise-app-1e52c.buildaispace.app/dashboard',
           image: smartwatchImg,
           tech: ['Flutter', 'Dart', 'Firebase']
         }
@@ -127,29 +127,29 @@ function App() {
       projects: [
         {
           title: 'Iraq Pharmacy Platform',
-          description: 'Comprehensive electronic platform for pharmacy services with advanced management system and user-friendly interface',
-          link: 'https://github.com/Maydy802/iraq-pharmacy-platform',
+          description: 'Electronic pharmacy platform for easy access to pharmaceutical products in Iraq',
+          link: 'https://preview--iraqi-pharmacy-hub.lovable.app/',
           image: pharmacyImg,
           tech: ['React', 'Node.js', 'MongoDB']
         },
         {
           title: 'Smart Pomodoro Application',
-          description: 'Advanced productivity timer to enhance focus and efficiency with detailed statistics and performance reports',
-          link: 'https://github.com/Maydy802/smart-pomodoro-app',
+          description: 'Productivity timer app built on Pomodoro technique',
+          link: 'https://mellow-mule-904.convex.app/',
           image: pomodoroImg,
           tech: ['JavaScript', 'CSS3', 'LocalStorage']
         },
         {
           title: 'Concrete Element Design Program',
-          description: 'Specialized software tool for designing concrete structural elements with precise engineering calculations',
-          link: 'https://github.com/Maydy802/concrete-design-program',
+          description: 'Web application for efficient design of concrete structural elements',
+          link: 'https://preview--beton-eucode-wizard.lovable.app/',
           image: concreteImg,
           tech: ['Python', 'Qt', 'NumPy']
         },
         {
           title: 'Smartwatch Dashboard Application',
-          description: 'Comprehensive dashboard application for smartwatches with health monitoring and smart notifications',
-          link: 'https://github.com/Maydy802/smartwatch-dashboard',
+          description: 'Digital dashboard for smart devices',
+          link: 'https://smart-rise-app-1e52c.buildaispace.app/dashboard',
           image: smartwatchImg,
           tech: ['Flutter', 'Dart', 'Firebase']
         }
@@ -201,7 +201,18 @@ function App() {
     setSubmitMessage('')
 
     try {
-      // Create mailto link with form data
+      // Create FormData for EmailJS or similar service
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        project_type: formData.projectType,
+        budget: formData.budget,
+        timeline: formData.timeline,
+        message: formData.description,
+        to_email: 'maidi.mustapha.09@gmail.com'
+      }
+
+      // For now, create a mailto link as fallback
       const subject = encodeURIComponent(`طلب تصميم مشروع من ${formData.name}`)
       const body = encodeURIComponent(`
 الاسم: ${formData.name}
@@ -217,12 +228,27 @@ ${formData.description}
 تم إرسال هذا الطلب من موقع مايدي مصطفى الشخصي
       `)
       
-      const mailtoLink = `mailto:maidi.mustapha.09@gmail.com?subject=${subject}&body=${body}`
-      
-      // Open email client
-      window.location.href = mailtoLink
-      
-      setSubmitMessage(language === 'ar' ? 'تم فتح تطبيق البريد الإلكتروني. يرجى إرسال الرسالة.' : 'Email client opened. Please send the message.')
+      // Try to send via fetch to a backend service (if available)
+      try {
+        const response = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(templateParams)
+        })
+        
+        if (response.ok) {
+          setSubmitMessage(language === 'ar' ? 'تم إرسال طلبك بنجاح! سأتواصل معك قريباً.' : 'Your request has been sent successfully! I will contact you soon.')
+        } else {
+          throw new Error('Backend not available')
+        }
+      } catch (backendError) {
+        // Fallback to mailto
+        const mailtoLink = `mailto:maidi.mustapha.09@gmail.com?subject=${subject}&body=${body}`
+        window.open(mailtoLink, '_blank')
+        setSubmitMessage(language === 'ar' ? 'تم فتح تطبيق البريد الإلكتروني. يرجى إرسال الرسالة.' : 'Email client opened. Please send the message.')
+      }
       
       // Reset form
       setFormData({
