@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
-import { Mail, MapPin, Globe, ExternalLink, Languages, Github, Linkedin, Code, Palette, Zap, Users, Target, Lightbulb } from 'lucide-react'
+import { Input } from '@/components/ui/input.jsx'
+import { Textarea } from '@/components/ui/textarea.jsx'
+import { Label } from '@/components/ui/label.jsx'
+import { Mail, MapPin, Globe, ExternalLink, Languages, Github, Linkedin, Code, Palette, Zap, Users, Target, Lightbulb, Download, Send, MessageSquare } from 'lucide-react'
 import pomodoroImg from './assets/pomodoro.png'
 import pharmacyImg from './assets/pharmacy.jpg'
 import concreteImg from './assets/concrete.jpg'
@@ -14,6 +17,16 @@ import './App.css'
 function App() {
   const [language, setLanguage] = useState('ar')
   const [isVisible, setIsVisible] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    projectType: '',
+    description: '',
+    budget: '',
+    timeline: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState('')
 
   useEffect(() => {
     setIsVisible(true)
@@ -40,28 +53,28 @@ function App() {
         {
           title: 'منصة صيدلية العراق',
           description: 'منصة إلكترونية شاملة لخدمات الصيدليات مع نظام إدارة متقدم وواجهة مستخدم سهلة الاستخدام',
-          link: '#',
+          link: 'https://github.com/Maydy802/iraq-pharmacy-platform',
           image: pharmacyImg,
           tech: ['React', 'Node.js', 'MongoDB']
         },
         {
           title: 'تطبيق بومودورو الذكي',
           description: 'مؤقت إنتاجية متطور لتعزيز التركيز والكفاءة مع إحصائيات مفصلة وتقارير الأداء',
-          link: '#',
+          link: 'https://github.com/Maydy802/smart-pomodoro-app',
           image: pomodoroImg,
           tech: ['JavaScript', 'CSS3', 'LocalStorage']
         },
         {
           title: 'برنامج تصميم العناصر الخرسانية',
           description: 'أداة برمجية متخصصة لتصميم العناصر الإنشائية الخرسانية مع حسابات هندسية دقيقة',
-          link: '#',
+          link: 'https://github.com/Maydy802/concrete-design-program',
           image: concreteImg,
           tech: ['Python', 'Qt', 'NumPy']
         },
         {
           title: 'تطبيق الساعة الذكية',
           description: 'تطبيق لوحة تحكم شاملة للساعة الذكية مع مراقبة الصحة والإشعارات الذكية',
-          link: '#',
+          link: 'https://github.com/Maydy802/smartwatch-dashboard',
           image: smartwatchImg,
           tech: ['Flutter', 'Dart', 'Firebase']
         }
@@ -73,8 +86,27 @@ function App() {
         'الفرنسية (متوسط)'
       ],
       contactTitle: 'التواصل معي',
+      designRequestTitle: 'طلب تصميم مشروع',
+      designRequestDescription: 'هل لديك فكرة مشروع؟ أرسل لي التفاصيل وسأتواصل معك قريباً',
       viewProject: 'عرض المشروع',
-      downloadCV: 'تحميل السيرة الذاتية'
+      downloadCV: 'تحميل السيرة الذاتية',
+      formLabels: {
+        name: 'الاسم الكامل',
+        email: 'البريد الإلكتروني',
+        projectType: 'نوع المشروع',
+        description: 'وصف المشروع',
+        budget: 'الميزانية المتوقعة',
+        timeline: 'الإطار الزمني المطلوب',
+        submit: 'إرسال الطلب'
+      },
+      projectTypes: [
+        'موقع إلكتروني',
+        'تطبيق موبايل',
+        'تطبيق ويب',
+        'نظام إدارة',
+        'متجر إلكتروني',
+        'أخرى'
+      ]
     },
     en: {
       name: 'Maidi Mustapha',
@@ -96,28 +128,28 @@ function App() {
         {
           title: 'Iraq Pharmacy Platform',
           description: 'Comprehensive electronic platform for pharmacy services with advanced management system and user-friendly interface',
-          link: '#',
+          link: 'https://github.com/Maydy802/iraq-pharmacy-platform',
           image: pharmacyImg,
           tech: ['React', 'Node.js', 'MongoDB']
         },
         {
           title: 'Smart Pomodoro Application',
           description: 'Advanced productivity timer to enhance focus and efficiency with detailed statistics and performance reports',
-          link: '#',
+          link: 'https://github.com/Maydy802/smart-pomodoro-app',
           image: pomodoroImg,
           tech: ['JavaScript', 'CSS3', 'LocalStorage']
         },
         {
           title: 'Concrete Element Design Program',
           description: 'Specialized software tool for designing concrete structural elements with precise engineering calculations',
-          link: '#',
+          link: 'https://github.com/Maydy802/concrete-design-program',
           image: concreteImg,
           tech: ['Python', 'Qt', 'NumPy']
         },
         {
           title: 'Smartwatch Dashboard Application',
           description: 'Comprehensive dashboard application for smartwatches with health monitoring and smart notifications',
-          link: '#',
+          link: 'https://github.com/Maydy802/smartwatch-dashboard',
           image: smartwatchImg,
           tech: ['Flutter', 'Dart', 'Firebase']
         }
@@ -129,12 +161,126 @@ function App() {
         'French (Intermediate)'
       ],
       contactTitle: 'Get In Touch',
+      designRequestTitle: 'Request Project Design',
+      designRequestDescription: 'Have a project idea? Send me the details and I\'ll get back to you soon',
       viewProject: 'View Project',
-      downloadCV: 'Download Resume'
+      downloadCV: 'Download Resume',
+      formLabels: {
+        name: 'Full Name',
+        email: 'Email Address',
+        projectType: 'Project Type',
+        description: 'Project Description',
+        budget: 'Expected Budget',
+        timeline: 'Required Timeline',
+        submit: 'Send Request'
+      },
+      projectTypes: [
+        'Website',
+        'Mobile App',
+        'Web Application',
+        'Management System',
+        'E-commerce Store',
+        'Other'
+      ]
     }
   }
 
   const currentContent = content[language]
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitMessage('')
+
+    try {
+      // Create mailto link with form data
+      const subject = encodeURIComponent(`طلب تصميم مشروع من ${formData.name}`)
+      const body = encodeURIComponent(`
+الاسم: ${formData.name}
+البريد الإلكتروني: ${formData.email}
+نوع المشروع: ${formData.projectType}
+الميزانية المتوقعة: ${formData.budget}
+الإطار الزمني: ${formData.timeline}
+
+وصف المشروع:
+${formData.description}
+
+---
+تم إرسال هذا الطلب من موقع مايدي مصطفى الشخصي
+      `)
+      
+      const mailtoLink = `mailto:maidi.mustapha.09@gmail.com?subject=${subject}&body=${body}`
+      
+      // Open email client
+      window.location.href = mailtoLink
+      
+      setSubmitMessage(language === 'ar' ? 'تم فتح تطبيق البريد الإلكتروني. يرجى إرسال الرسالة.' : 'Email client opened. Please send the message.')
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        projectType: '',
+        description: '',
+        budget: '',
+        timeline: ''
+      })
+    } catch (error) {
+      setSubmitMessage(language === 'ar' ? 'حدث خطأ. يرجى المحاولة مرة أخرى.' : 'An error occurred. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const downloadCV = () => {
+    // Create a simple CV content
+    const cvContent = `
+مايدي مصطفى - مطور برمجيات متخصص
+
+البريد الإلكتروني: maidi.mustapha.09@gmail.com
+الموقع: الجلفة، الجزائر
+
+الملخص المهني:
+أنا مطور برمجيات مبدع ودقيق، لدي خبرة واسعة في إنشاء ونشر تطبيقات مبتكرة في مجالات متعددة.
+
+المهارات الأساسية:
+- تطوير تطبيقات الويب والموبايل
+- البرمجة للواجهة الأمامية والخلفية
+- تصميم واجهات وتجربة المستخدم
+- حل المشكلات وتصحيح الأخطاء
+- إدارة المشاريع
+- التعاون والعمل ضمن فريق
+
+المشاريع:
+1. منصة صيدلية العراق
+2. تطبيق بومودورو الذكي
+3. برنامج تصميم العناصر الخرسانية
+4. تطبيق الساعة الذكية
+
+اللغات:
+- العربية (اللغة الأم)
+- الإنجليزية (متقدم)
+- الفرنسية (متوسط)
+    `
+    
+    const blob = new Blob([cvContent], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'Maidi_Mustapha_CV.txt'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 ${language === 'ar' ? 'rtl' : 'ltr'} transition-all duration-1000`}>
@@ -216,7 +362,12 @@ function App() {
             </p>
             
             <div className="flex justify-center gap-4">
-              <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-xl px-8 py-4 text-lg">
+              <Button 
+                onClick={downloadCV}
+                size="lg" 
+                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-xl px-8 py-4 text-lg"
+              >
+                <Download className="w-5 h-5 mr-2" />
                 {currentContent.downloadCV}
               </Button>
             </div>
@@ -294,15 +445,146 @@ function App() {
                 </CardHeader>
                 <CardContent>
                   <Button 
+                    onClick={() => window.open(project.link, '_blank')}
                     variant="outline" 
                     className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg text-lg py-3"
                   >
+                    <ExternalLink className="w-5 h-5 mr-2" />
                     {currentContent.viewProject}
                   </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
+        </section>
+
+        {/* Design Request Section */}
+        <section className="mb-16">
+          <Card className="shadow-2xl border-0 bg-gradient-to-br from-white/95 to-green-50/95 dark:from-gray-800/95 dark:to-green-900/30 backdrop-blur-xl hover:shadow-3xl transition-all duration-700">
+            <CardHeader className="text-center">
+              <CardTitle className="text-4xl bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-4">
+                <MessageSquare className="w-12 h-12 mx-auto mb-4 text-green-500" />
+                {currentContent.designRequestTitle}
+              </CardTitle>
+              <CardDescription className="text-xl text-gray-600 dark:text-gray-300">
+                {currentContent.designRequestDescription}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="name" className="text-lg font-semibold">
+                      {currentContent.formLabels.name}
+                    </Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="mt-2 text-lg p-4 border-2 border-green-200 focus:border-green-400 rounded-xl"
+                      placeholder={language === 'ar' ? 'أدخل اسمك الكامل' : 'Enter your full name'}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email" className="text-lg font-semibold">
+                      {currentContent.formLabels.email}
+                    </Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="mt-2 text-lg p-4 border-2 border-green-200 focus:border-green-400 rounded-xl"
+                      placeholder={language === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email address'}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="projectType" className="text-lg font-semibold">
+                      {currentContent.formLabels.projectType}
+                    </Label>
+                    <select
+                      id="projectType"
+                      name="projectType"
+                      value={formData.projectType}
+                      onChange={handleInputChange}
+                      required
+                      className="mt-2 w-full text-lg p-4 border-2 border-green-200 focus:border-green-400 rounded-xl bg-white dark:bg-gray-800"
+                    >
+                      <option value="">{language === 'ar' ? 'اختر نوع المشروع' : 'Select project type'}</option>
+                      {currentContent.projectTypes.map((type, index) => (
+                        <option key={index} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Label htmlFor="budget" className="text-lg font-semibold">
+                      {currentContent.formLabels.budget}
+                    </Label>
+                    <Input
+                      id="budget"
+                      name="budget"
+                      value={formData.budget}
+                      onChange={handleInputChange}
+                      className="mt-2 text-lg p-4 border-2 border-green-200 focus:border-green-400 rounded-xl"
+                      placeholder={language === 'ar' ? 'مثال: 1000-5000 دولار' : 'e.g., $1000-5000'}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="timeline" className="text-lg font-semibold">
+                    {currentContent.formLabels.timeline}
+                  </Label>
+                  <Input
+                    id="timeline"
+                    name="timeline"
+                    value={formData.timeline}
+                    onChange={handleInputChange}
+                    className="mt-2 text-lg p-4 border-2 border-green-200 focus:border-green-400 rounded-xl"
+                    placeholder={language === 'ar' ? 'مثال: شهر واحد، 3 أشهر' : 'e.g., 1 month, 3 months'}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="description" className="text-lg font-semibold">
+                    {currentContent.formLabels.description}
+                  </Label>
+                  <Textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    required
+                    rows={6}
+                    className="mt-2 text-lg p-4 border-2 border-green-200 focus:border-green-400 rounded-xl resize-none"
+                    placeholder={language === 'ar' ? 'اشرح فكرة مشروعك بالتفصيل...' : 'Describe your project idea in detail...'}
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white border-0 hover:from-green-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 shadow-xl text-xl py-6"
+                >
+                  <Send className="w-6 h-6 mr-3" />
+                  {isSubmitting ? (language === 'ar' ? 'جاري الإرسال...' : 'Sending...') : currentContent.formLabels.submit}
+                </Button>
+
+                {submitMessage && (
+                  <div className="text-center p-4 bg-green-100 dark:bg-green-900/30 rounded-xl">
+                    <p className="text-green-700 dark:text-green-300 text-lg">{submitMessage}</p>
+                  </div>
+                )}
+              </form>
+            </CardContent>
+          </Card>
         </section>
 
         {/* Languages Section */}
@@ -348,11 +630,21 @@ function App() {
                 </a>
               </div>
               <div className="flex justify-center gap-6">
-                <Button variant="outline" size="lg" className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-0 hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 hover:scale-105 shadow-xl px-8 py-4">
+                <Button 
+                  onClick={() => window.open('https://github.com/Maydy802', '_blank')}
+                  variant="outline" 
+                  size="lg" 
+                  className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-0 hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 hover:scale-105 shadow-xl px-8 py-4"
+                >
                   <Github className="w-6 h-6 mr-3" />
                   GitHub
                 </Button>
-                <Button variant="outline" size="lg" className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white border-0 hover:from-indigo-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 shadow-xl px-8 py-4">
+                <Button 
+                  onClick={() => window.open('https://linkedin.com/in/maidi-mustapha', '_blank')}
+                  variant="outline" 
+                  size="lg" 
+                  className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white border-0 hover:from-indigo-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 shadow-xl px-8 py-4"
+                >
                   <Linkedin className="w-6 h-6 mr-3" />
                   LinkedIn
                 </Button>
